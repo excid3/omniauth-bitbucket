@@ -11,6 +11,10 @@ module OmniAuth
         :token_url  => 'https://bitbucket.org/site/oauth2/access_token'
       }
 
+      # Leave this blank to use the redirect_uri you specified in your BitBucket
+      # OAuth application settings
+      option :callback_url
+
       # These are called after authentication has succeeded. If
       # possible, you should try to set the UID without making
       # additional calls (if the user id is returned with the token
@@ -24,6 +28,10 @@ module OmniAuth
           :avatar => raw_info['avatar'],
           :email => raw_info['email']
         }
+      end
+
+      def callback_url
+        options[:callback_url]
       end
 
       def raw_info
