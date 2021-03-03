@@ -17,7 +17,6 @@ Gem::Specification.new do |s|
   s.require_paths = ["lib"]
 
   # specify any dependencies here; for example:
-  s.add_dependency 'omniauth', '>= 1.9', '< 3'
   s.add_dependency 'omniauth-oauth2', '>= 1.1.1', '< 2.0'
   s.add_dependency 'multi_json', '~> 1.7'
 
