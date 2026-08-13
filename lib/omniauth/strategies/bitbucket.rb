@@ -1,18 +1,14 @@
-require 'omniauth-oauth2'
+require "omniauth-oauth2"
 
 module OmniAuth
   module Strategies
     class Bitbucket < OmniAuth::Strategies::OAuth2
-      # This is where you pass the options you would pass when
-      # initializing your consumer from the OAuth gem.
       option :client_options, {
-        :site => 'https://bitbucket.org',
-        :authorize_url     => 'https://bitbucket.org/site/oauth2/authorize',
-        :token_url  => 'https://bitbucket.org/site/oauth2/access_token'
+        site: "https://api.bitbucket.org",
+        authorize_url: "https://bitbucket.org/site/oauth2/authorize",
+        token_url: "https://bitbucket.org/site/oauth2/access_token"
       }
 
-      # Leave this blank to use the redirect_uri you specified in your BitBucket
-      # OAuth application settings
       option :callback_url
 
       # These are called after authentication has succeeded. If
@@ -20,26 +16,24 @@ module OmniAuth
       # additional calls (if the user id is returned with the token
       # or as a URI parameter). This may not be possible with all
       # providers.
-      uid { raw_info['username'] }
+      uid { raw_info["username"] }
 
       info do
         {
-          :name => "#{raw_info['first_name']} #{raw_info['last_name']}",
-          :avatar => raw_info['avatar'],
-          :email => raw_info['email']
+          :name => "#{raw_info["first_name"]} #{raw_info["last_name"]}",
+          :avatar => raw_info["avatar"],
+          :email => raw_info["email"]
         }
       end
 
-      def callback_url
-        options[:callback_url]
-      end
+      def callback_url = options[:callback_url]
 
       def raw_info
         @raw_info ||= begin
-                        ri = access_token.get('/api/2.0/user').parsed
-                        email = access_token.get('/api/2.0/user/emails').parsed['values'].find { |email| email['is_primary'] }
-                        ri.merge!('email' => email['email']) if email
-                        ri
+                        info = access_token.get("/2.0/user").parsed
+                        email = access_token.get("/2.0/user/emails").parsed["values"].find { it["is_primary"] }
+                        info.merge!("email" => email["email"]) if email
+                        info
                       end
       end
     end
